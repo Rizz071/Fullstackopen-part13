@@ -2,6 +2,11 @@ const router = require('express').Router()
 
 const { Blog } = require('../models')
 
+const blogFinder = async (req, res, next) => {
+    req.blog = await Blog.findByPk(req.params.id)
+    next()
+}
+
 router.get('/', async (req, res) => {
     const blogs = await Blog.findAll()
     res.status(200).send(blogs)
@@ -16,32 +21,29 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/:id', async (req, res) => {
-    const blog = await Blog.findByPk(req.params.id)
-    if (blog) {
-        res.json(blog)
+router.get('/:id', blogFinder, async (req, res) => {
+    if (req.blog) {
+        res.json(req.blog)
     } else {
         res.status(404).end()
     }
 })
 
-router.delete('/:id', async (req, res) => {
-    const blog = await Blog.findByPk(req.params.id)
-    if (blog) {
-        await blog.destroy()
+router.delete('/:id', blogFinder, async (req, res) => {
+    if (req.blog) {
+        await req.blog.destroy()
     }
     res.status(204).end()
 })
 
-// router.put('/:id', async (req, res) => {
-//     const note = await Note.findByPk(req.params.id)
-//     if (note) {
-//         note.important = req.body.important
-//         await note.save()
-//         res.json(note)
-//     } else {
-//         res.status(404).end()
-//     }
-// })
+router.put('/:id', blogFinder, async (req, res) => {
+    if (req.blog) {
+        req.blog.likes += 1
+        await req.blog.save()
+        res.json(req.blog)
+    } else {
+        res.status(404).end()
+    }
+})
 
 module.exports = router
