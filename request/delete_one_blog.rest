@@ -1,2 +1,2 @@
-DELETE http://127.0.0.1:3003/api/blogs/6
+DELETE http://127.0.0.1:3003/api/blogs/13
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyQGdtYWlsLmNvbSIsImlkIjoxMywiaWF0IjoxNzA2OTk0MzA1fQ.wmPs-tOFo7xbC9lum4hKsk6nYe5VVJdokteAJ_G9400
