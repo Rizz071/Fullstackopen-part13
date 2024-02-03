@@ -1,0 +1,6 @@
+PUT http://127.0.0.1:3003/api/users/testuser@gmail.com
+Content-Type: application/json
+
+{
+    "username": "testuserCHANGEDmail.com"
+}

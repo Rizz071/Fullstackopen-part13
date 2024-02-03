@@ -26,9 +26,9 @@ const errorHandler = (err, req, res, next) => {
 
     switch (req.method) {
         case 'POST':
-            return res.status(400).json(err.name)
+            return res.status(400).json(err.errors[0].message)
         case 'PUT':
-            return res.status(404).json(err.name)
+            return res.status(404).json(err.errors[0].message)
         default:
             next(err)
     }

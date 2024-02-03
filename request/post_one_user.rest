@@ -2,7 +2,7 @@ POST http://127.0.0.1:3003/api/users
 Content-Type: application/json
 
 {
-    "username": "testuser1",
+    "username": "testuser@gmail.com",
     "password": "password",
     "name": "Esi Merkki"
 }

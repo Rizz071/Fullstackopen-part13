@@ -3,7 +3,7 @@ const router = require('express').Router()
 const { User } = require('../models')
 
 const userFinder = async (req, res, next) => {
-    req.username = await User.findOne({ where: { username: req.params.username } })
+    req.user = await User.findOne({ where: { username: req.params.username } })
     next()
 }
 
@@ -37,7 +37,7 @@ router.delete('/:id', userFinder, async (req, res) => {
 })
 
 router.put('/:username', userFinder, async (req, res, next) => {
-    if (req.username) {
+    if (req.user) {
         req.user.username = req.body.username
 
         try {

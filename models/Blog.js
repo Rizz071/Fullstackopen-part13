@@ -15,7 +15,10 @@ Blog.init({
     },
     url: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            isUrl: true
+        }
     },
     title: {
         type: DataTypes.TEXT,
@@ -23,7 +26,10 @@ Blog.init({
     },
     likes: {
         type: DataTypes.INTEGER,
-        defaultValue: 0
+        defaultValue: 0,
+        validate: {
+            isNumeric: true
+        }
     }
 }, {
     sequelize,
