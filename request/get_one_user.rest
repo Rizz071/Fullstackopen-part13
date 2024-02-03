@@ -1,0 +1,2 @@
+GET http://127.0.0.1:3003/api/users/testuser1
+Content-Type: application/json

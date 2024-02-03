@@ -47,7 +47,10 @@ router.put('/:id', blogFinder, async (req, res, next) => {
         catch (error) {
             next(error)
         }
+    } else {
+        res.status(404).end()
     }
+
 })
 
 module.exports = router
