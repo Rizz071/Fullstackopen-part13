@@ -13,10 +13,12 @@ const userFinder = async (req, res, next) => {
             {
                 model: Blog,
                 as: 'marked_blogs',
-                through: {
-                    attributes: []
+                attributes: {
+                    exclude: ['userId']
                 },
-                attributes: { exclude: ['userId'] }
+                through: {
+                    attributes: ['id', 'unread']
+                }
             }
         ]
     })
