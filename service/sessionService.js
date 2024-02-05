@@ -3,7 +3,7 @@ const { SECRET } = require('../util/config')
 const { User, Session } = require('../models')
 const { Op } = require('sequelize')
 
-
+/* MIDDLEWARE: Extracting token from request */
 const tokenExtractor = async (req, res, next) => {
 
     const authorization = await req.get('authorization')
@@ -20,6 +20,9 @@ const tokenExtractor = async (req, res, next) => {
     next()
 }
 
+/* MIDDLEWARE: Checking token for expriration and for disabed
+ * user state at each user action
+ */
 const tokenCheck = async (req, res, next) => {
     if (!req.decodedToken.id) {
         return res.status(401).json({ error: 'token invalid' })
@@ -50,30 +53,13 @@ const tokenCheck = async (req, res, next) => {
     next()
 }
 
+/* Cleaning DB from expired tokens */
 const dropExpiredTokens = async (id) => {
-    // const userSessions = await Session.findAll({
-    //     where: {
-    //         userId: id
-    //     }
-    // })
-
-    // await userSessions.forEach(async session => {
-
-    //     if (session.expiration < Date.now()) {
-    //         // console.log(session.toJSON())
-
-    //         await session.destroy()
-    //     }
-    // })
-
     await Session.destroy({
         where: {
             expiration: { [Op.lt]: Date.now() },
         }
     })
 }
-
-
-
 
 module.exports = { tokenExtractor, tokenCheck, dropExpiredTokens }
