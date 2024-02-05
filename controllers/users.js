@@ -1,8 +1,6 @@
 const router = require('express').Router()
-const { Op } = require('sequelize')
 
-
-const { User, Blog, ReadingList } = require('../models')
+const { User, Blog, ReadingList, Session } = require('../models')
 
 const userFinder = async (req, res, next) => {
 
@@ -25,6 +23,9 @@ const userFinder = async (req, res, next) => {
                     attributes: ['id', 'unread'],
                     where: req.query.read ? { unread: req.query.read } : {}
                 }
+            },
+            {
+                model: Session
             }
         ]
     })

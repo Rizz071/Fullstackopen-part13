@@ -1,28 +1,11 @@
 const router = require('express').Router()
-const jwt = require('jsonwebtoken')
-const { SECRET } = require('../util/config')
-
-const { Blog, User } = require('../models')
-const { sequelize } = require('../util/db')
+const { Blog, User, Session } = require('../models')
 
 const { Op } = require('sequelize')
+const { tokenExtractor, tokenCheck } = require('../service/sessionService')
 
 const blogFinder = async (req, res, next) => {
     req.blog = await Blog.findByPk(req.params.id)
-    next()
-}
-
-const tokenExtractor = (req, res, next) => {
-    const authorization = req.get('authorization')
-    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-        try {
-            req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
-        } catch {
-            return res.status(401).json({ error: 'token invalid' })
-        }
-    } else {
-        return res.status(401).json({ error: 'token missing' })
-    }
     next()
 }
 
@@ -60,7 +43,9 @@ router.get('/', async (req, res) => {
     res.status(200).send(blogs)
 })
 
-router.post('/', tokenExtractor, async (req, res, next) => {
+router.post('/', tokenExtractor, tokenCheck, async (req, res, next) => {
+
+
     try {
         const user = await User.findByPk(req.decodedToken.id)
         const blog = await Blog.create({ ...req.body, userId: user.id })
@@ -78,7 +63,7 @@ router.get('/:id', blogFinder, async (req, res) => {
     }
 })
 
-router.delete('/:id', blogFinder, tokenExtractor, async (req, res) => {
+router.delete('/:id', blogFinder, tokenExtractor, tokenCheck, async (req, res) => {
     if (req.blog.userId !== req.decodedToken.id) {
         res.status(401).send('unauthorized')
     }
@@ -88,7 +73,7 @@ router.delete('/:id', blogFinder, tokenExtractor, async (req, res) => {
     res.status(204).end()
 })
 
-router.put('/:id', blogFinder, async (req, res, next) => {
+router.put('/:id', blogFinder, tokenExtractor, tokenCheck, async (req, res, next) => {
     if (req.blog) {
         req.blog.likes = req.body.likes
 

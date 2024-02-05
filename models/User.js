@@ -24,6 +24,11 @@ User.init({
     password: {
         type: DataTypes.TEXT,
         allowNull: false
+    },
+    is_disabled: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 }, {
     sequelize,
