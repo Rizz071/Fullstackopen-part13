@@ -1,9 +1,35 @@
 const router = require('express').Router()
 
-const { User, Blog } = require('../models')
+const { User, Blog, ReadingList } = require('../models')
 
 const userFinder = async (req, res, next) => {
-    req.user = await User.findOne({ where: { username: req.params.username } })
+    req.user = await User.findOne({
+        where: { username: req.params.username },
+        include: [
+            {
+                model: Blog,
+                attributes: { exclude: ['userId'] }
+            },
+            {
+                model: Blog,
+                as: 'marked_blogs',
+                through: {
+                    attributes: []
+                },
+                attributes: { exclude: ['userId'] }
+            }
+        ]
+    })
+
+    const readingListsForUser = await ReadingList.findAll({
+        attributes: ['userId', 'blogId'],
+        where: {
+            userId: 1
+        }
+    })
+    // console.log(JSON.parse(req.user))
+    req.user.readinglist = readingListsForUser
+    // console.log(req.user)
     next()
 }
 
@@ -12,9 +38,20 @@ const userFinder = async (req, res, next) => {
 router.get('/', async (req, res) => {
     const users = await User.findAll({
         attributes: { exclude: ['password'] },
-        include: {
-            model: Blog
-        }
+        include: [
+            {
+                model: Blog,
+                attributes: { exclude: ['userId'] }
+            },
+            {
+                model: Blog,
+                as: 'marked_blogs',
+                through: {
+                    attributes: []
+                },
+                attributes: { exclude: ['userId'] }
+            }
+        ]
     })
     res.status(200).send(users)
 })
@@ -29,8 +66,9 @@ router.post('/', async (req, res, next) => {
 })
 
 router.get('/:username', userFinder, async (req, res) => {
-    if (req.username) {
-        res.json(req.username)
+    // console.log(req.user)
+    if (req.user) {
+        res.json(req.user)
     } else {
         res.status(404).end()
     }

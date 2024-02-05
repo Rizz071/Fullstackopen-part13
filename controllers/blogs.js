@@ -29,10 +29,19 @@ const tokenExtractor = (req, res, next) => {
 router.get('/', async (req, res) => {
     const blogs = await Blog.findAll({
         attributes: { exclude: ['userId'] },
-        include: {
-            model: User,
-            attributes: ['name']
-        },
+        include: [
+            {
+                model: User,
+                attributes: ['name']
+            },
+            {
+                model: User,
+                as: 'users_marked',
+                through: {
+                    attributes: []
+                }
+            }
+        ],
         order: [['likes', 'DESC']],
         where: {
             [Op.or]: [

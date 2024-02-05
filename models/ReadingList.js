@@ -21,7 +21,7 @@ ReadingList.init({
     },
     unread: {
         type: DataTypes.BOOLEAN,
-        default: true,
+        defaultValue: true,
         allowNull: false
     }
 }, {

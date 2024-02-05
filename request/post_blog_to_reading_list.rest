@@ -1,10 +1,9 @@
-POST http://127.0.0.1:3003/api/blogs
+POST http://127.0.0.1:3003/api/readinglists
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE3MDcxMjIwMDd9.p-5Mwul2xMC458n1Ws3VJuBCvLnbbOe0LCl8HuDIzVI
 
+
 {
-    "author": "Tort 3 author",
-    "url": "http://test.org",
-    "title": "Test 3 blog title",
-    "year": "2024"
+  "blogId": 3,
+  "userId": 1
 }
