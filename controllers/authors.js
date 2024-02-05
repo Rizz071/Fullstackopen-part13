@@ -5,9 +5,6 @@ const { SECRET } = require('../util/config')
 const { Blog } = require('../models')
 const { sequelize } = require('../util/db')
 
-const { Op } = require('sequelize')
-
-
 router.get('/', async (req, res) => {
     const authors = await Blog.findAll({
         attributes: [

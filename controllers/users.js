@@ -1,10 +1,15 @@
 const router = require('express').Router()
+const { Op } = require('sequelize')
+
 
 const { User, Blog, ReadingList } = require('../models')
 
 const userFinder = async (req, res, next) => {
+
     req.user = await User.findOne({
-        where: { username: req.params.username },
+        where: {
+            username: req.params.username
+        },
         include: [
             {
                 model: Blog,
@@ -17,7 +22,8 @@ const userFinder = async (req, res, next) => {
                     exclude: ['userId']
                 },
                 through: {
-                    attributes: ['id', 'unread']
+                    attributes: ['id', 'unread'],
+                    where: req.query.read ? { unread: req.query.read } : {}
                 }
             }
         ]
@@ -29,9 +35,7 @@ const userFinder = async (req, res, next) => {
             userId: 1
         }
     })
-    // console.log(JSON.parse(req.user))
     req.user.readinglist = readingListsForUser
-    // console.log(req.user)
     next()
 }
 
@@ -68,7 +72,6 @@ router.post('/', async (req, res, next) => {
 })
 
 router.get('/:username', userFinder, async (req, res) => {
-    // console.log(req.user)
     if (req.user) {
         res.json(req.user)
     } else {

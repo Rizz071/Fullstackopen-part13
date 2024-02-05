@@ -1,1 +1,1 @@
-GET http://127.0.0.1:3003/api/users/testuser@gmail.com
+GET http://127.0.0.1:3003/api/users/testuser@gmail.com?read=false
