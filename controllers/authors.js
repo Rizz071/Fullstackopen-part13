@@ -1,6 +1,4 @@
 const router = require('express').Router()
-const jwt = require('jsonwebtoken')
-const { SECRET } = require('../util/config')
 
 const { Blog } = require('../models')
 const { sequelize } = require('../util/db')

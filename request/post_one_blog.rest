@@ -1,6 +1,6 @@
 POST http://127.0.0.1:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE3MDcxNzE1NzN9.MmabmnPJgnDX1Rp6Elo9wAhtBsKiNcSoOwor153IXNA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE3MDcxNzEyODd9.1pjdFiJaRScI91mYI3nCJZgYaD1AVFxdDHL4EEhwm40
 
 {
     "author": "Tort 3 author",

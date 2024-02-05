@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { Blog, User, Session } = require('../models')
+const { Blog, User } = require('../models')
 
 const { Op } = require('sequelize')
 const { tokenExtractor, tokenCheck } = require('../service/sessionService')

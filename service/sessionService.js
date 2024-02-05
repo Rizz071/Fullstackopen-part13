@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../util/config')
 const { User, Session } = require('../models')
+const { Op } = require('sequelize')
 
 
-const tokenExtractor = (req, res, next) => {
+const tokenExtractor = async (req, res, next) => {
 
-    const authorization = req.get('authorization')
+    const authorization = await req.get('authorization')
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         try {
             req.token = authorization.substring(7)
@@ -21,7 +22,7 @@ const tokenExtractor = (req, res, next) => {
 
 const tokenCheck = async (req, res, next) => {
     if (!req.decodedToken.id) {
-        return res.status(401).json({ error: 'token invalid of too old' })
+        return res.status(401).json({ error: 'token invalid' })
     }
 
     const user = await User.findByPk(req.decodedToken.id)
@@ -42,8 +43,37 @@ const tokenCheck = async (req, res, next) => {
     if (!session) {
         return res.status(401).json({ error: 'session for user not found. please login' })
     }
+    if (session.expiration < Date.now()) {
+        return res.status(401).json({ error: 'token expired! please login again' })
+    }
 
     next()
 }
 
-module.exports = { tokenExtractor, tokenCheck }
+const dropExpiredTokens = async (id) => {
+    // const userSessions = await Session.findAll({
+    //     where: {
+    //         userId: id
+    //     }
+    // })
+
+    // await userSessions.forEach(async session => {
+
+    //     if (session.expiration < Date.now()) {
+    //         // console.log(session.toJSON())
+
+    //         await session.destroy()
+    //     }
+    // })
+
+    await Session.destroy({
+        where: {
+            expiration: { [Op.lt]: Date.now() },
+        }
+    })
+}
+
+
+
+
+module.exports = { tokenExtractor, tokenCheck, dropExpiredTokens }
