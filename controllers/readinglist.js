@@ -47,4 +47,26 @@ router.get('/:id', async (req, res) => {
     res.status(200).send(readingListEntity)
 })
 
+router.put('/:id', tokenExtractor, async (req, res, next) => {
+
+    // const user = await User.findByPk(req.decodedToken.id)
+    const blogFromReadingList = await ReadingList.findByPk(req.params.id)
+
+    if (req.decodedToken.id === blogFromReadingList.userId) {
+        blogFromReadingList.unread = req.body.unread
+
+        try {
+            await blogFromReadingList.save()
+            res.json(blogFromReadingList)
+        }
+        catch (error) {
+            next(error)
+        }
+    } else {
+        res.status(404).end()
+    }
+
+})
+
+
 module.exports = router
