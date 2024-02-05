@@ -30,6 +30,14 @@ Blog.init({
         validate: {
             isNumeric: true
         }
+    },
+    year: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+            min: 1991,
+            max: 2024
+        }
     }
 }, {
     sequelize,
